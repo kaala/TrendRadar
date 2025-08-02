@@ -2868,7 +2868,7 @@ class NewsAnalyzer:
                 '</head>',
                 '<body>',
                 '<script>',
-                f'var txt = {self.title_file};',
+                f'var txt = "{self.title_file}";',
                 '</script>'
                 '<script>',
                 """async function update() { var f = await fetch(txt); var t = await f.text(); var e = document.createElement('div'); e.innerText = t; document.body.appendChild(e); }""",
