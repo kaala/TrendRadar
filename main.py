@@ -1424,20 +1424,20 @@ def render_html_content(
             .titles { max-width: 500px; }
             .source { color: #666; font-style: italic; }
             .error { color: #d9534f; }
-            .news-link { 
-                color: #007bff; 
-                text-decoration: none; 
+            .news-link {
+                color: #007bff;
+                text-decoration: none;
                 border-bottom: 1px dotted #007bff;
             }
-            .news-link:hover { 
-                color: #0056b3; 
-                text-decoration: underline; 
+            .news-link:hover {
+                color: #0056b3;
+                text-decoration: underline;
             }
-            .news-link:visited { 
-                color: #6f42c1; 
+            .news-link:visited {
+                color: #6f42c1;
             }
-            .no-link { 
-                color: #333; 
+            .no-link {
+                color: #333;
             }
             .new-title {
                 background-color: #fff3cd;
@@ -2730,6 +2730,7 @@ class NewsAnalyzer:
 
         title_file = save_titles_to_file(results, id_to_name, failed_ids)
         print(f"标题已保存到: {title_file}")
+        self.title_file = title_file
 
         return results, id_to_name, failed_ids
 
@@ -2856,7 +2857,29 @@ class NewsAnalyzer:
 
             results, id_to_name, failed_ids = self._crawl_data()
 
-            self._execute_mode_strategy(mode_strategy, results, id_to_name, failed_ids)
+            # self._execute_mode_strategy(mode_strategy, results, id_to_name, failed_ids)
+
+            html_text = [
+                '<!DOCTYPE html>',
+                '<html lang="en">',
+                '<head>',
+                '<meta charset="UTF-8">',
+                '<meta name="viewport" content="width=device-width, initial-scale=1.0">',
+                '</head>',
+                '<body>',
+                '<script>',
+                f'var txt = {self.title_file};',
+                '</script>'
+                '<script>',
+                'async function update() { var f = await fetch(txt); var t = await f.text(); var e = document.createElement('div'); e.innerText = t; document.body.appendChild(e); }',
+                'setTimeout(update, 0);',
+                '</script>',
+                '</body>',
+                '</html>',
+            ]
+
+            with open('index.html','w',encoding='utf-8') as f:
+                f.write('\n'.join(html_text))
 
         except Exception as e:
             print(f"分析流程执行出错: {e}")
