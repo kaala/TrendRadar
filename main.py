@@ -2856,26 +2856,15 @@ class NewsAnalyzer:
             mode_strategy = self._get_mode_strategy()
 
             results, id_to_name, failed_ids = self._crawl_data()
+            with open(self.title_file) as f:
+                text = f.read()
 
             # self._execute_mode_strategy(mode_strategy, results, id_to_name, failed_ids)
 
             html_text = [
-                '<!DOCTYPE html>',
-                '<html lang="en">',
-                '<head>',
-                '<meta charset="UTF-8">',
-                '<meta name="viewport" content="width=device-width, initial-scale=1.0">',
-                '</head>',
-                '<body>',
-                '<script>',
-                f'var txt = "{self.title_file}";',
-                '</script>'
-                '<script>',
-                """async function update() { var f = await fetch(txt); var t = await f.text(); var e = document.createElement('div'); e.innerText = t; document.body.appendChild(e); }""",
-                'setTimeout(update, 0);',
-                '</script>',
-                '</body>',
-                '</html>',
+                text.replace('\n','\n\n'),
+                '\n\n',
+                '<!-- Markdeep: --><style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style><script src="markdeep.min.js" charset="utf-8"></script><script src="https://morgan3d.github.io/markdeep/latest/markdeep.min.js" charset="utf-8"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>',
             ]
 
             with open('index.html','w',encoding='utf-8') as f:
